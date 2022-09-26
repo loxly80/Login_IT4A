@@ -16,5 +16,10 @@ namespace Login_IT4A
             Name = name;
             Password = password;
         }
+
+        internal bool VerifyPassword(string text)
+        {
+            return Password == text;
+        }
     }
 }

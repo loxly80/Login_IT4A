@@ -51,6 +51,7 @@
             this.lblLogin.Size = new System.Drawing.Size(59, 25);
             this.lblLogin.TabIndex = 1;
             this.lblLogin.Text = "label2";
+            this.lblLogin.Click += new System.EventHandler(this.lblLogin_Click);
             // 
             // FormMain
             // 
