@@ -17,7 +17,7 @@ namespace Login_IT4A
             { "jirka", new User("jirka","jirka") },
             { "petr", new User("petr","petr") }
         };
-        private string connectionString = @"DataSource=(localdb)\MSSQLLocalDB;Initial Catalog=Login_A;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Login_A;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         public List<User> GetUsers()
         {
@@ -45,14 +45,25 @@ namespace Login_IT4A
 
         public User? GetUser(string username)
         {
-            if (users.ContainsKey(username))
+            User? user = null;
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
-                return users[username];
+                sqlConnection.Open();
+                using (SqlCommand cmd = sqlConnection.CreateCommand())
+                {
+                    cmd.CommandText = "select * from Users where Name=@Name";
+                    cmd.Parameters.AddWithValue("Name", username);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                           user = new User(reader["Name"].ToString(), reader["Password"].ToString());                                
+                        }
+                    }
+                }
+                sqlConnection.Close();
             }
-            else
-            {
-                return null;
-            }
+            return user;
         }
     }
 }
