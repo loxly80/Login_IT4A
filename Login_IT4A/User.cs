@@ -10,22 +10,33 @@ namespace Login_IT4A
     public class User
     {
         public string Name { get; }
-        public string Password { get; }
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
+        public byte[] PasswordHash { get; internal set; }
+        public byte[] PasswordSalt { get; internal set; }
 
         public User(string name, string password)
         {
             Name = name;
-            Password = password;
+            CreatePasswordHash(password);
+        }
+
+        public User(string name, byte[] passwordHash, byte[] passwordSalt)
+        {
+            Name = name;
+            PasswordHash = passwordHash;
+            PasswordSalt = passwordSalt;
         }
 
         public bool VerifyPassword(string text)
         {
-            return Password == text;
+            byte[] hash;
+            using (var hmac = new HMACSHA512(PasswordSalt))
+            {
+                hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(text));
+            }           
+            return hash.SequenceEqual(PasswordHash);
         }
 
-        public void CreatePasswordHash(string password)
+        private void CreatePasswordHash(string password)
         {
             using(var hmac = new HMACSHA512())
             {

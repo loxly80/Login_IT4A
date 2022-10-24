@@ -18,6 +18,7 @@ namespace Login_IT4A
         {
             InitializeComponent();
             sqlRepository = new SqlRepository();
+            sqlRepository.ConvertUsersToHashed();
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

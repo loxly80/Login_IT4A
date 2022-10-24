@@ -33,7 +33,8 @@ namespace Login_IT4A
                         while (reader.Read())
                         {
                             users.Add(new User(reader["Name"].ToString()
-                                             , reader["Password"].ToString())
+                                             , (byte[])reader["PasswordHash"]
+                                             , (byte[])reader["PasswordSalt"])
                                 );
                         }
                     }
@@ -57,13 +58,39 @@ namespace Login_IT4A
                     {
                         if (reader.Read())
                         {
-                           user = new User(reader["Name"].ToString(), reader["Password"].ToString());                                
+                            user = new User(reader["Name"].ToString(), (byte[])reader["PasswordHash"], (byte[])reader["PasswordSalt"]);
                         }
                     }
                 }
                 sqlConnection.Close();
             }
             return user;
+        }
+
+        public void SaveUser(User user)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+                using (SqlCommand cmd = sqlConnection.CreateCommand())
+                {
+                    cmd.CommandText = "update Users set PasswordSalt=@Salt, PasswordHash=@Hash where Name=@Name";
+                    cmd.Parameters.AddWithValue("Salt", user.PasswordSalt);
+                    cmd.Parameters.AddWithValue("Hash", user.PasswordHash);
+                    cmd.Parameters.AddWithValue("Name", user.Name);
+                    cmd.ExecuteNonQuery();
+                }
+                sqlConnection.Close();
+            }
+        }
+
+        public void ConvertUsersToHashed()
+        {
+            var users = GetUsers();
+            foreach (var user in users)
+            {
+                SaveUser(user);
+            }
         }
     }
 }

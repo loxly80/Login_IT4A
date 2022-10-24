@@ -30,6 +30,7 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.lblLogin = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -53,11 +54,21 @@
             this.lblLogin.Text = "label2";
             this.lblLogin.Click += new System.EventHandler(this.lblLogin_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(12, 9);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(179, 34);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "Správa uživatelů";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(854, 485);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.lblLogin);
             this.Controls.Add(this.label1);
             this.Name = "FormMain";
@@ -72,5 +83,6 @@
 
         private Label label1;
         internal Label lblLogin;
+        private Button button1;
     }
 }
