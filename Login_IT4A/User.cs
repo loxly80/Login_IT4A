@@ -44,5 +44,20 @@ namespace Login_IT4A
                 PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             }
         }
+
+        public void ChangePassword(string password)
+        {
+            CreatePasswordHash(password);
+        }
+
+        public string[] ToStringArray()
+        {
+            return new string[] { Name, "" };
+        }
+
+        public ListViewItem ToListViewItem()
+        {
+            return new ListViewItem(ToStringArray());
+        }
     }
 }

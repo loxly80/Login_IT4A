@@ -84,6 +84,38 @@ namespace Login_IT4A
             }
         }
 
+        public void CreateUser(User user)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+                using (SqlCommand cmd = sqlConnection.CreateCommand())
+                {
+                    cmd.CommandText = "insert into Users(Name,PasswordHash,PasswordSalt) values(@Name,@Hash,@Salt)";
+                    cmd.Parameters.AddWithValue("Salt", user.PasswordSalt);
+                    cmd.Parameters.AddWithValue("Hash", user.PasswordHash);
+                    cmd.Parameters.AddWithValue("Name", user.Name);
+                    cmd.ExecuteNonQuery();
+                }
+                sqlConnection.Close();
+            }
+        }
+
+        public void DeleteUser(User user)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+                using (SqlCommand cmd = sqlConnection.CreateCommand())
+                {
+                    cmd.CommandText = "delete from Users where Name=@Name";
+                    cmd.Parameters.AddWithValue("Name", user.Name);
+                    cmd.ExecuteNonQuery();
+                }
+                sqlConnection.Close();
+            }
+        }
+
         public void ConvertUsersToHashed()
         {
             var users = GetUsers();
