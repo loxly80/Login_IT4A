@@ -33,6 +33,7 @@
             this.tsAddUser = new System.Windows.Forms.ToolStripButton();
             this.tsChangePassword = new System.Windows.Forms.ToolStripButton();
             this.tsDeleteUser = new System.Windows.Forms.ToolStripButton();
+            this.tsFind = new System.Windows.Forms.ToolStripTextBox();
             this.lvUsers = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
@@ -46,7 +47,8 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsAddUser,
             this.tsChangePassword,
-            this.tsDeleteUser});
+            this.tsDeleteUser,
+            this.tsFind});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 33);
@@ -62,6 +64,7 @@
             this.tsAddUser.Size = new System.Drawing.Size(34, 28);
             this.tsAddUser.Text = "toolStripButton1";
             this.tsAddUser.ToolTipText = "Přidat uživatele";
+            this.tsAddUser.Click += new System.EventHandler(this.tsAddUser_Click);
             // 
             // tsChangePassword
             // 
@@ -72,6 +75,7 @@
             this.tsChangePassword.Size = new System.Drawing.Size(34, 28);
             this.tsChangePassword.Text = "toolStripButton2";
             this.tsChangePassword.ToolTipText = "Změnit heslo";
+            this.tsChangePassword.Click += new System.EventHandler(this.tsChangePassword_Click);
             // 
             // tsDeleteUser
             // 
@@ -82,6 +86,13 @@
             this.tsDeleteUser.Size = new System.Drawing.Size(34, 28);
             this.tsDeleteUser.Text = "toolStripButton3";
             this.tsDeleteUser.ToolTipText = "Smazat uživatele";
+            this.tsDeleteUser.Click += new System.EventHandler(this.tsDeleteUser_Click);
+            // 
+            // tsFind
+            // 
+            this.tsFind.Name = "tsFind";
+            this.tsFind.Size = new System.Drawing.Size(100, 33);
+            this.tsFind.TextChanged += new System.EventHandler(this.tsFind_TextChanged);
             // 
             // lvUsers
             // 
@@ -134,5 +145,6 @@
         private ListView lvUsers;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
+        private ToolStripTextBox tsFind;
     }
 }

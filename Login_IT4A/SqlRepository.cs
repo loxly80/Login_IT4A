@@ -44,6 +44,32 @@ namespace Login_IT4A
             return users;
         }
 
+        public List<User> GetUsers(string searchString)
+        {
+            List<User> users = new List<User>();
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+                using (SqlCommand cmd = sqlConnection.CreateCommand())
+                {
+                    cmd.CommandText = "select * from Users where Name like @Search";
+                    cmd.Parameters.AddWithValue("Search", "%" + searchString + "%");
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(new User(reader["Name"].ToString()
+                                             , (byte[])reader["PasswordHash"]
+                                             , (byte[])reader["PasswordSalt"])
+                                );
+                        }
+                    }
+                }
+                sqlConnection.Close();
+            }
+            return users;
+        }
+
         public User? GetUser(string username)
         {
             User? user = null;
@@ -110,6 +136,21 @@ namespace Login_IT4A
                 {
                     cmd.CommandText = "delete from Users where Name=@Name";
                     cmd.Parameters.AddWithValue("Name", user.Name);
+                    cmd.ExecuteNonQuery();
+                }
+                sqlConnection.Close();
+            }
+        }
+
+        public void DeleteUser(string userName)
+        {
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+                using (SqlCommand cmd = sqlConnection.CreateCommand())
+                {
+                    cmd.CommandText = "delete from Users where Name=@Name";
+                    cmd.Parameters.AddWithValue("Name", userName);
                     cmd.ExecuteNonQuery();
                 }
                 sqlConnection.Close();
