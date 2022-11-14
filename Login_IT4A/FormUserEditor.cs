@@ -60,7 +60,11 @@ namespace Login_IT4A
         private void tsAddUser_Click(object sender, EventArgs e)
         {
             FormUserEditorDialog formUserEditorDialog = new FormUserEditorDialog(null);
-            formUserEditorDialog.ShowDialog();
+            var result = formUserEditorDialog.ShowDialog();
+            if(result == DialogResult.OK)
+            {
+                LoadData();
+            }
         }
 
         private void tsChangePassword_Click(object sender, EventArgs e)

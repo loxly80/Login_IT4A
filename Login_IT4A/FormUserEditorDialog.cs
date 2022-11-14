@@ -35,6 +35,7 @@ namespace Login_IT4A
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
+            DialogResult = DialogResult.Cancel;
             Close();
         }
 
@@ -43,13 +44,15 @@ namespace Login_IT4A
             SqlRepository sqlRepository = new SqlRepository();
             if (user != null)
             {
+                user.ChangePassword(txtPassword.Text);
                 sqlRepository.SaveUser(user);
             }
             else
             {
-                user = new User(txtUserName.Text, txtUserName.Text);
+                user = new User(txtUserName.Text, txtPassword.Text);
                 sqlRepository.CreateUser(user);
             }
+            DialogResult = DialogResult.OK;
         }
     }
 }
