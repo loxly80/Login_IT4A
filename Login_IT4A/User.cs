@@ -12,15 +12,18 @@ namespace Login_IT4A
         public string Name { get; }
         public byte[] PasswordHash { get; internal set; }
         public byte[] PasswordSalt { get; internal set; }
+        public List<string> Roles { get; internal set; }
 
         public User(string name, string password)
         {
+            Roles = new List<string>();
             Name = name;
             CreatePasswordHash(password);
         }
 
         public User(string name, byte[] passwordHash, byte[] passwordSalt)
         {
+            Roles = new List<string>();
             Name = name;
             PasswordHash = passwordHash;
             PasswordSalt = passwordSalt;

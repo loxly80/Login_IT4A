@@ -78,7 +78,7 @@ namespace Login_IT4A
                 sqlConnection.Open();
                 using (SqlCommand cmd = sqlConnection.CreateCommand())
                 {
-                    cmd.CommandText = "select * from Users where Name=@Name";
+                    cmd.CommandText = "select * from dbo.fnGetUser(@Name)";
                     cmd.Parameters.AddWithValue("Name", username);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
