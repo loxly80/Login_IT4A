@@ -17,7 +17,7 @@ namespace Login_IT4A
             { "jirka", new User("jirka","jirka") },
             { "petr", new User("petr","petr") }
         };
-        private string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Login_A;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=C:\USERS\HLA\DESKTOP\LOGIN_A.MDF;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
         public List<User> GetUsers()
         {
@@ -32,10 +32,11 @@ namespace Login_IT4A
                     {
                         while (reader.Read())
                         {
-                            users.Add(new User(reader["Name"].ToString()
+                            var user = new User(reader["Name"].ToString()
                                              , (byte[])reader["PasswordHash"]
-                                             , (byte[])reader["PasswordSalt"])
-                                );
+                                             , (byte[])reader["PasswordSalt"]);
+                            user.Roles = GetRoles(user);
+                            users.Add(user);
                         }
                     }
                 }
@@ -58,10 +59,11 @@ namespace Login_IT4A
                     {
                         while (reader.Read())
                         {
-                            users.Add(new User(reader["Name"].ToString()
+                            var user = new User(reader["Name"].ToString()
                                              , (byte[])reader["PasswordHash"]
-                                             , (byte[])reader["PasswordSalt"])
-                                );
+                                             , (byte[])reader["PasswordSalt"]);
+                            user.Roles = GetRoles(user);
+                            users.Add(user);
                         }
                     }
                 }
@@ -78,13 +80,14 @@ namespace Login_IT4A
                 sqlConnection.Open();
                 using (SqlCommand cmd = sqlConnection.CreateCommand())
                 {
-                    cmd.CommandText = "select * from dbo.fnGetUser(@Name)";
+                    cmd.CommandText = "select * from Users where Name=@Name";
                     cmd.Parameters.AddWithValue("Name", username);
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
                             user = new User(reader["Name"].ToString(), (byte[])reader["PasswordHash"], (byte[])reader["PasswordSalt"]);
+                            user.Roles = GetRoles(user);
                         }
                     }
                 }
@@ -155,6 +158,29 @@ namespace Login_IT4A
                 }
                 sqlConnection.Close();
             }
+        }
+
+        public List<string> GetRoles(User user)
+        {
+            List<string> roles = new List<string>();
+            using(SqlConnection sqlConnection = new SqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+                using(SqlCommand cmd = sqlConnection.CreateCommand())
+                {
+                    cmd.CommandText = $"select * from dbo.fnGetRoles(@Username)";
+                    cmd.Parameters.AddWithValue("Username", user.Name);
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            roles.Add(reader[0].ToString() ?? "");
+                        }
+                    }
+                }
+                sqlConnection.Close();
+            }
+            return roles;
         }
 
         public void ConvertUsersToHashed()

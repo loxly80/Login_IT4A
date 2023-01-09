@@ -12,6 +12,18 @@ namespace Login_IT4A
             this.user = user;
             InitializeComponent();
             lblLogin.Text = user.Name;
+            if(user.Roles.Count > 0)
+            {
+                btnUserEditor.Visible = true;
+            }
+            else if (user.Roles.Contains("admin"))
+            {
+                btnUserEditor.Visible = true;
+            }
+            else
+            {
+                btnUserEditor.Visible = false;
+            }
         }
 
         public void Show(Form startupForm)
